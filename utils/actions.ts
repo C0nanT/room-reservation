@@ -18,6 +18,28 @@ function authenticateAndRedirect(): string {
 export async function createMeeting(values: MeetingForm) {
   const userId = authenticateAndRedirect();
   try {
+    const overlappingMeeting = await prisma.meeting.findFirst({
+      where: {
+        NOT: [
+          {
+            endTime: {
+              lt: values.startTime,
+            },
+          },
+          {
+            startTime: {
+              gt: values.endTime,
+            },
+          },
+        ],
+      },
+    });
+
+    if (overlappingMeeting) {
+      console.log('A meeting already exists within the provided time range.');
+      return null; // Or throw an error or return a specific message
+    }
+
     const meeting = await prisma.meeting.create({
       data: {
         ...values,
@@ -27,7 +49,7 @@ export async function createMeeting(values: MeetingForm) {
     return meeting;
   } catch (error) {
     console.log(error);
-    return null
+    return null;
   }
 }
 
@@ -38,7 +60,7 @@ export async function getMeetings() {
       where: {
         userId,
       },
-    })
+    });
     return meetings;
   } catch (error) {
     console.log(error);
@@ -65,14 +87,41 @@ export async function getMeeting(id: string) {
 export async function updateMeeting(id: string, values: MeetingForm) {
   const userId = authenticateAndRedirect();
   try {
+
+    const overlappingMeeting = await prisma.meeting.findFirst({
+      where: {
+        id: {
+          not: id
+        },
+        userId,
+        NOT: [
+          {
+            endTime: {
+              lt: values.startTime,
+            },
+          },
+          {
+            startTime: {
+              gt: values.endTime,
+            },
+          },
+        ],
+      },
+    });
+
+    if (overlappingMeeting) {
+      console.log('A meeting already exists within the provided time range.');
+      return null;
+    }
+
     const meeting = await prisma.meeting.update({
       where: {
         id,
         userId,
       },
       data: values,
-    })
-    return meeting
+    });
+    return meeting;
   } catch (error) {
     console.log(error);
     return null;

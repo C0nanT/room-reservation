@@ -3,10 +3,12 @@ import TopNav from "@/components/Topbar";
 
 function layout({ children }: { children: React.ReactNode }) {
   return (
-    <main className="flex">
+    <main>
       <TopNav />
-      <Sidenav />
-      {children}
+      <div className="flex">
+        <Sidenav />
+        {children}
+      </div>
     </main>
   );
 }

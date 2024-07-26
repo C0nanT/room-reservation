@@ -21,6 +21,7 @@ model User {
 
 model Meeting {
   id          String     @id @default(uuid())
+  room        String
   title       String
   description String?
   startTime   DateTime

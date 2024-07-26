@@ -20,6 +20,7 @@ export async function createMeeting(values: MeetingForm) {
   try {
     const overlappingMeeting = await prisma.meeting.findFirst({
       where: {
+        room: values.room,
         NOT: [
           {
             endTime: {
@@ -93,7 +94,7 @@ export async function updateMeeting(id: string, values: MeetingForm) {
         id: {
           not: id
         },
-        userId,
+        room: values.room,
         NOT: [
           {
             endTime: {

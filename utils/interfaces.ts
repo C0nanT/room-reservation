@@ -13,6 +13,7 @@ export interface Guest {
 
 export interface Meeting {
   id: string;
+  room: string;
   title: string;
   description?: string;
   startTime: Date;
@@ -26,6 +27,7 @@ export interface Meeting {
 
 export interface MeetingForm {
   title: string;
+  room: string;
   description?: string;
   startTime: Date;
   endTime: Date;

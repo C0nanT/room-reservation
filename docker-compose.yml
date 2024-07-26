@@ -17,3 +17,6 @@ services:
     volumes:
       - .:/app
     command: yarn dev
+    
+volumes:
+    postgres_data:

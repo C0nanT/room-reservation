@@ -23,7 +23,7 @@ export const links = [
 
 const Sidenav = () => {
   return (
-    <aside className="h-screen w-64 bg-muted px-2 py-32 flex flex-col justify-between">
+    <aside className="hidden min-h-screen w-64 bg-muted px-2 py-24 md:flex flex-col justify-between">
       <ul className="flex flex-col items-center gap-2">
         {links.map(({ href, label }) => (
           <Link

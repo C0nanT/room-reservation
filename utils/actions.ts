@@ -23,21 +23,14 @@ export async function createMeeting(values: MeetingForm) {
         room: values.room,
         NOT: [
           {
-            endTime: {
-              lt: values.startTime,
-            },
-          },
-          {
-            startTime: {
-              gt: values.endTime,
-            },
+            startTime: values.startTime,
           },
         ],
       },
     });
 
     if (overlappingMeeting) {
-      console.log('A meeting already exists within the provided time range.');
+      console.log("A meeting already exists within the provided time range.");
       return null; // Or throw an error or return a specific message
     }
 
@@ -88,30 +81,22 @@ export async function getMeeting(id: string) {
 export async function updateMeeting(id: string, values: MeetingForm) {
   const userId = authenticateAndRedirect();
   try {
-
     const overlappingMeeting = await prisma.meeting.findFirst({
       where: {
         id: {
-          not: id
+          not: id,
         },
         room: values.room,
         NOT: [
           {
-            endTime: {
-              lt: values.startTime,
-            },
-          },
-          {
-            startTime: {
-              gt: values.endTime,
-            },
+            startTime: values.startTime,
           },
         ],
       },
     });
 
     if (overlappingMeeting) {
-      console.log('A meeting already exists within the provided time range.');
+      console.log("A meeting already exists within the provided time range.");
       return null;
     }
 
@@ -123,6 +108,21 @@ export async function updateMeeting(id: string, values: MeetingForm) {
       data: values,
     });
     return meeting;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+}
+
+export async function getMeetingsReservations() {
+  try {
+    const meetings = await prisma.meeting.findMany({
+      select: {
+        startTime: true,
+        room: true,
+      },
+    });
+    return meetings;
   } catch (error) {
     console.log(error);
     return null;

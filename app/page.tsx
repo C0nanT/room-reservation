@@ -40,7 +40,7 @@ export default function Home() {
   return (
     <main className="p-2 flex flex-col items-center">
         <ModeToggle />
-        <h1 className="text-4xl mb-8 font-bold">Dream Room</h1>
+        <h1 className="text-4xl my-8 font-bold">Dream Room</h1>
         <h2 className="text-lg text-center">Find your dream room that meets all your needs or those of your company. Make your reservation and notify all meeting members.</h2>
         <div className="grid md:grid-cols-3 gap-4 my-8 mx-auto">
           {rooms.map(({ title, description, alt, href, src }) => (

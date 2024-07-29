@@ -25,7 +25,6 @@ model Meeting {
   title       String
   description String?
   startTime   DateTime
-  endTime     DateTime
   userId      String
   user        User       @relation(fields: [userId], references: [id])
   guests      Guest[]

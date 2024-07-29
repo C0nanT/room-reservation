@@ -1,10 +1,10 @@
 import Sidenav from "@/components/Sidenav";
-import TopNav from "@/components/Topbar";
+import Topbar from "@/components/Topbar";
 
 function layout({ children }: { children: React.ReactNode }) {
   return (
     <main>
-      <TopNav />
+      <Topbar />
       <div className="flex">
         <Sidenav />
         {children}

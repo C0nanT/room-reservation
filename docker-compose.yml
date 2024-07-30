@@ -1,15 +1,4 @@
 services:
-  postgres:
-    container_name: postgres
-    image: postgres
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=testpass123
-      - POSTGRES_DB=mydb
-    ports:
-      - 6500:5432
-    volumes:
-    - postgres_data:/var/lib/postgresql/data
   web:
     build: .
     ports:
@@ -17,6 +6,3 @@ services:
     volumes:
       - .:/app
     command: yarn dev
-    
-volumes:
-    postgres_data:

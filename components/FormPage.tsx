@@ -81,26 +81,23 @@ const FormPage = () => {
     }
     const participants = values.guestEmails.map((email) => ({ email }));
     try {
-      const meetingResult = await createMeeting({
+       await createMeeting({
         title: values.title,
         room: roomName ? roomName : "",
         description: values.description,
         startTime: values.date,
-        participants: emailUser ? [...participants, { email: emailUser }] : participants,
+        participants: emailUser
+          ? [...participants, { email: emailUser }]
+          : participants,
       });
-      console.log(meetingResult);
     } catch (error) {
       console.log(error);
     }
-
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
   }
 
   return (
     <div className="flex w-full flex-col items-center p-2">
-      <h1 className="my-12 text-3xl">{roomName} Reservation</h1>
+      <h1 className="my-12 text-center text-3xl">{roomName} Reservation</h1>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <FormField
@@ -160,9 +157,9 @@ const FormPage = () => {
               <Label htmlFor="guestsEmail">Guests</Label>
               {Array.from({ length: Number(selectedValue) }, (_, index) => (
                 <FormField
-                  key={index} // Add a unique key for each input
+                  key={index}
                   control={form.control}
-                  name={`guestEmails.${index}`} // Ensure each input has a unique name
+                  name={`guestEmails.${index}`}
                   render={({ field }) => (
                     <FormItem>
                       <FormControl>

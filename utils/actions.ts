@@ -4,6 +4,7 @@ import prisma from "./db";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import { MeetingForm } from "./interfaces";
+import { addMinutes, subMinutes } from "date-fns";
 
 function authenticateAndRedirect(): string {
   const { userId } = auth();
@@ -17,29 +18,39 @@ function authenticateAndRedirect(): string {
 
 export async function createMeeting(values: MeetingForm) {
   const userId = authenticateAndRedirect();
+  const oneHourBefore = subMinutes(new Date(values.startTime), 59);
+  const oneHourAfter = addMinutes(new Date(values.startTime), 59);
   try {
     const overlappingMeeting = await prisma.meeting.findFirst({
       where: {
         room: values.room,
-        NOT: [
-          {
-            startTime: values.startTime,
-          },
-        ],
+        startTime: {
+          gte: oneHourBefore,
+          lte: oneHourAfter,
+        },
       },
     });
 
     if (overlappingMeeting) {
-      console.log("A meeting already exists within the provided time range.");
-      return null; // Or throw an error or return a specific message
+      console.log(
+        "A meeting already exists in this room at the same start time.",
+      );
+      return null;
     }
 
     const meeting = await prisma.meeting.create({
       data: {
-        ...values,
+        title: values.title,
+        room: values.room,
+        description: values.description,
+        startTime: values.startTime,
         userId,
+        participants: {
+          create: values.participants,
+        },
       },
     });
+
     return meeting;
   } catch (error) {
     console.log(error);
@@ -105,7 +116,12 @@ export async function updateMeeting(id: string, values: MeetingForm) {
         id,
         userId,
       },
-      data: values,
+      data: {
+        ...values,
+        participants: {
+          create: values.participants.map((guest) => ({ email: guest.email })),
+        },
+      },
     });
     return meeting;
   } catch (error) {

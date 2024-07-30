@@ -4,10 +4,10 @@ export interface User {
   meetings: Meeting[];
 }
 
-export interface Guest {
+export interface Participant {
   id: string;
   email: string;
-  meetingId: string;
+  meetindgId: string;
   meeting: Meeting;
 }
 
@@ -17,11 +17,8 @@ export interface Meeting {
   title: string;
   description?: string;
   startTime: Date;
-  endTime: Date;
   userId: string;
-  guests: {
-    create: Omit<Guest, "id" | "meetingId" | "meeting">[];
-  }
+  participants: Participant[];
   summary?: string;
 }
 
@@ -30,8 +27,9 @@ export interface MeetingForm {
   room: string;
   description?: string;
   startTime: Date;
-  endTime: Date;
-  guests: {
-    create: Omit<Guest, "id" | "meetingId" | "meeting">[];
-  };
+  participants: {email: string}[];
+}
+
+export interface CreateParticipantInput {
+  email: string;
 }

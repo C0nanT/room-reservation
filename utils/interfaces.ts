@@ -18,7 +18,7 @@ export interface Meeting {
   description?: string;
   startTime: Date;
   userId: string;
-  participants: Participant[];
+  participants: {email: string}[];
   summary?: string;
 }
 
@@ -30,6 +30,3 @@ export interface MeetingForm {
   participants: {email: string}[];
 }
 
-export interface CreateParticipantInput {
-  email: string;
-}

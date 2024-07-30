@@ -9,32 +9,36 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = "file:./dev.db"
+  provider     = "sqlite"
+  url          = "file:./dev.db"
+  relationMode = "prisma"
 }
 
 model User {
-  id         String   @id @unique
-  email      String   @unique
-  meetings   Meeting[]
+  id       String    @id @unique
+  email    String    @unique
+  meetings Meeting[]
 }
 
-model Guest {
-  id        String   @id @default(uuid())
+model Participant {
+  id        String  @id @default(uuid())
   email     String
   meetingId String
-  meeting   Meeting  @relation(fields: [meetingId], references: [id])
+  meeting   Meeting @relation(fields: [meetingId], references: [id])
+
+  @@index([meetingId])
 }
 
 model Meeting {
-  id          String     @id @default(uuid())
-  room        String
-  title       String
-  description String?
-  startTime   DateTime
-  userId      String
-  user        User       @relation(fields: [userId], references: [id])
-  guests      Guest[]
-  summary     String?
-}
+  id           String        @id @default(uuid())
+  room         String
+  title        String
+  description  String?
+  startTime    DateTime
+  userId       String
+  user         User          @relation(fields: [userId], references: [id])
+  participants Participant[]
+  summary      String?
 
+  @@index([userId])
+}

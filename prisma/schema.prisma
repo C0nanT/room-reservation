@@ -9,14 +9,21 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider = "sqlite"
+  url      = "file:./dev.db"
 }
 
 model User {
   id         String   @id @unique
   email      String   @unique
   meetings   Meeting[]
+}
+
+model Guest {
+  id        String   @id @default(uuid())
+  email     String
+  meetingId String
+  meeting   Meeting  @relation(fields: [meetingId], references: [id])
 }
 
 model Meeting {
@@ -31,9 +38,3 @@ model Meeting {
   summary     String?
 }
 
-model Guest {
-  id         String   @id @default(uuid())
-  email      String
-  meetingId  String
-  meeting    Meeting  @relation(fields: [meetingId], references: [id])
-}

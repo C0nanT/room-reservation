@@ -4,12 +4,12 @@ import {
   MenubarItem,
   MenubarMenu,
   MenubarSeparator,
-  MenubarShortcut,
   MenubarTrigger,
 } from "@/components/ui/menubar";
 import Link from "next/link";
 import { Menu } from "lucide-react";
 import Image from "next/image";
+import { links } from "./Sidenav";
 
 const Topnav = () => {
   return (
@@ -19,24 +19,16 @@ const Topnav = () => {
           <Menu />
         </MenubarTrigger>
         <MenubarContent>
+          {links.map(({ href, label }) => (
+            <>
+              <MenubarItem key={label}>
+                <Link href={href}>{label}</Link>
+              </MenubarItem>
+              <MenubarSeparator />
+            </>
+          ))}
           <MenubarItem>
-            <Link href="/">Home</Link>
-          </MenubarItem>
-          <MenubarSeparator />
-          <MenubarItem>
-            <Link href="/individual">Individual Room</Link>
-          </MenubarItem>
-          <MenubarSeparator />
-          <MenubarItem>
-            <Link href="/meeting">Meeting Room</Link>
-          </MenubarItem>
-          <MenubarSeparator />
-          <MenubarItem>
-            <Link href="/events">Events Room</Link>
-          </MenubarItem>
-          <MenubarSeparator />
-          <MenubarItem>
-            <ul className="flex gap-2 justify-center">
+            <ul className="flex justify-center gap-2">
               <li className="cursor-pointer">
                 <Image
                   src="/instagram.png"

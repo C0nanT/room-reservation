@@ -32,26 +32,33 @@ import { Calendar } from "./ui/calendar";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
+import { createMeeting } from "@/utils/actions";
 
 const FormPage = () => {
   const searchParams = useSearchParams();
-  const name = searchParams.get("name");
+  const roomName = searchParams.get("name");
   const price = searchParams.get("price");
   const capacity = Number(searchParams.get("capacity"));
   const user = useUser();
   const emailUser = user.user?.emailAddresses[0].emailAddress;
 
   const [selectedValue, setSelectedValue] = useState("0");
-  const [calendarDate, setCalendarDate] = useState(null);
+  const [calendarDate, setCalendarDate] = useState(undefined);
 
-  const handleValueChange = (value) => {
+  const handleValueChange = (value: string) => {
     setSelectedValue(value);
   };
 
   const formSchema = z.object({
     title: z.string().min(2, {
-      message: "Username must be at least 2 characters.",
+      message: "Title must be at least 2 characters.",
     }),
+    description: z.string().optional(),
+    guestEmails: z.array(
+      z.string().email({ message: "Invalid email address" }),
+    ),
+    date: z.date(),
+    time: z.string(),
   });
 
   // 1. Define your form.
@@ -60,11 +67,36 @@ const FormPage = () => {
     defaultValues: {
       title: "",
       description: "",
+      guestEmails: [],
+      date: undefined,
+      time: "",
     },
   });
 
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    let startTime;
+    if (values.date && values.time) {
+      startTime = new Date(values.date);
+      startTime.setHours(Number(values.time), 0, 0, 0);
+    }
+
+    try {
+      const guests = values.guestEmails.map((email) => ({ email }));
+      const meetingResult = await createMeeting({
+        title: values.title,
+        room: roomName,
+        description: values.description,
+        startTime: startTime || new Date(),
+        guests: {
+          create: [...guests, { email: emailUser }],
+        },
+      });
+      console.log(meetingResult);
+    } catch (error) {
+      console.log(error);
+    }
+
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     console.log(values);
@@ -72,7 +104,7 @@ const FormPage = () => {
 
   return (
     <div className="flex w-full flex-col items-center p-2">
-      <h1 className="my-12 text-3xl">{name} Reservation</h1>
+      <h1 className="my-12 text-3xl">{roomName} Reservation</h1>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <FormField
@@ -134,7 +166,7 @@ const FormPage = () => {
                 <FormField
                   key={index} // Add a unique key for each input
                   control={form.control}
-                  name={`guestEmail${index}`} // Ensure each input has a unique name
+                  name={`guestEmails.${index}`} // Ensure each input has a unique name
                   render={({ field }) => (
                     <FormItem>
                       <FormControl>
@@ -151,10 +183,10 @@ const FormPage = () => {
           )}
           <FormField
             control={form.control}
-            name="dob"
+            name="date"
             render={({ field }) => (
               <FormItem className="flex flex-col">
-                <FormLabel>Date of birth</FormLabel>
+                <FormLabel>Date of reservation</FormLabel>
                 <Popover>
                   <PopoverTrigger asChild>
                     <FormControl>
@@ -193,7 +225,7 @@ const FormPage = () => {
           {calendarDate && (
             <FormField
               control={form.control}
-              name="type"
+              name="time"
               render={({ field }) => (
                 <FormItem className="space-y-3">
                   <FormLabel>Choose a time</FormLabel>

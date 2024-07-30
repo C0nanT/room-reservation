@@ -75,22 +75,18 @@ const FormPage = () => {
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    let startTime;
     if (values.date && values.time) {
-      startTime = new Date(values.date);
-      startTime.setHours(Number(values.time), 0, 0, 0);
+      // Parse the time value to an integer and set it as the hour of the date.
+      values.date.setHours(parseInt(values.time));
     }
-
+    const participants = values.guestEmails.map((email) => ({ email }));
     try {
-      const guests = values.guestEmails.map((email) => ({ email }));
       const meetingResult = await createMeeting({
         title: values.title,
-        room: roomName,
+        room: roomName ? roomName : "",
         description: values.description,
-        startTime: startTime || new Date(),
-        guests: {
-          create: [...guests, { email: emailUser }],
-        },
+        startTime: values.date,
+        participants: emailUser ? [...participants, { email: emailUser }] : participants,
       });
       console.log(meetingResult);
     } catch (error) {

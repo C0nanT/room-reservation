@@ -49,6 +49,9 @@ export async function createMeeting(values: MeetingForm) {
           create: values.participants,
         },
       },
+      include: {
+        participants: true,
+      },
     });
 
     return meeting;
@@ -64,6 +67,9 @@ export async function getMeetings() {
     const meetings = await prisma.meeting.findMany({
       where: {
         userId,
+      },
+      include: {
+        participants: true,
       },
     });
     return meetings;

@@ -18,6 +18,10 @@ export const links = [
     href: "/events",
     label: "Events Room",
   },
+  {
+    href: "/reservations",
+    label: "Reservations",
+  }
 ];
 
 

@@ -2,19 +2,36 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Getting Started
 
-First, run the development server:
+F# Room Reservation
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## How to Clone and Run the Project
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+1. Clone the repository:
+    ```sh
+    git clone https://github.com/mateusceci-coder/room-reservation.git
+    ```
+
+2. Install the dependencies:
+    ```sh
+    npm install
+    ```
+
+3. Generate your `publishableKey` at [Clerk Dashboard](https://dashboard.clerk.com/last-active?path=api-keys).
+
+4. Copy the `.env.local.example` file and remove the `.example` extension:
+    ```sh
+    cp .env.local.example .env.local
+    ```
+
+5. Add your `publishableKey` to the `.env.local` file.
+
+6. Run the development server:
+    ```sh
+    npm run dev
+    ```
+
+7. Access the project in your browser: [http://localhost:3000](http://localhost:3000).
+
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 

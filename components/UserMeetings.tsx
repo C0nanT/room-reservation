@@ -12,7 +12,7 @@ const UserMeetings = () => {
   });
 
   if (isPending) {
-    return <p>loading ...</p>;
+    return <p>loading</p>;
   }
 
   const now = new Date();

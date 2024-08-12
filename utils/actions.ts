@@ -87,6 +87,9 @@ export async function getMeeting(id: string) {
         id,
         userId,
       },
+      include: {
+        participants: true,
+      },
     });
     return meeting;
   } catch (error) {

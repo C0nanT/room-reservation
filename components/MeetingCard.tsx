@@ -1,3 +1,4 @@
+"use client";
 import { ChevronsUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -14,9 +15,17 @@ import {
 } from "@/components/ui/collapsible";
 import { Meeting } from "@/utils/interfaces";
 import { toZonedTime, format } from "date-fns-tz";
+import { useRouter } from "next/router";
+import Link from "next/link";
 
 const MeetingCard = ({ meeting }: { meeting: Meeting }) => {
   const startTimeInUTC = toZonedTime(meeting.startTime, "UTC");
+
+  const now = new Date();
+  const timeDifferenceInMinutes =
+    (now.getTime() - startTimeInUTC.getTime()) / (1000 * 60);
+
+  const isEditDisabled = timeDifferenceInMinutes >= 59;
 
   return (
     <Card key={meeting.id} className="max-w-xs">
@@ -26,7 +35,13 @@ const MeetingCard = ({ meeting }: { meeting: Meeting }) => {
             <CardTitle className="text-2xl">{meeting.title}</CardTitle>
             <CardDescription>{meeting.description}</CardDescription>
           </div>
-          <Button size="sm">Edit</Button>
+          {!isEditDisabled && (
+            <Link href={`/form/${meeting.id}`} passHref>
+              <Button size="sm">
+                Edit
+              </Button>
+            </Link>
+          )}
         </div>
       </CardHeader>
       <CardContent>

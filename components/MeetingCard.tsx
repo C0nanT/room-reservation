@@ -18,6 +18,12 @@ import { toZonedTime, format } from "date-fns-tz";
 const MeetingCard = ({ meeting }: { meeting: Meeting }) => {
   const startTimeInUTC = toZonedTime(meeting.startTime, "UTC");
 
+  const now = new Date();
+  const timeDifferenceInMinutes =
+    (now.getTime() - startTimeInUTC.getTime()) / (1000 * 60);
+
+  const isEditDisabled = timeDifferenceInMinutes >= 59;
+
   return (
     <Card key={meeting.id} className="max-w-xs">
       <CardHeader>
@@ -26,7 +32,11 @@ const MeetingCard = ({ meeting }: { meeting: Meeting }) => {
             <CardTitle className="text-2xl">{meeting.title}</CardTitle>
             <CardDescription>{meeting.description}</CardDescription>
           </div>
-          <Button size="sm">Edit</Button>
+          {!isEditDisabled && (
+            <Button size="sm" disabled={isEditDisabled}>
+              Edit
+            </Button>
+          )}
         </div>
       </CardHeader>
       <CardContent>

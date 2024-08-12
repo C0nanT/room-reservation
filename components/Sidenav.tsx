@@ -1,5 +1,6 @@
-import Image from "next/image";
+// import Image from "next/image";
 import Link from "next/link";
+import { FaInstagram, FaWhatsapp, FaYoutube } from "react-icons/fa";
 
 export const links = [
   {
@@ -21,33 +22,58 @@ export const links = [
   {
     href: "/reservations",
     label: "Reservations",
-  }
+  },
 ];
-
 
 const Sidenav = () => {
   return (
-    <aside className="hidden min-h-screen w-64 bg-muted px-2 py-24 md:flex flex-col justify-between">
+    <aside className="hidden min-h-screen w-64 flex-col justify-between bg-muted px-2 py-24 md:flex">
       <ul className="flex flex-col items-center gap-2">
         {links.map(({ href, label }) => (
           <Link
             key={label}
             href={href}
-            className="w-full rounded-xl p-2 text-center hover:bg-muted-foreground"
+            className="w-full rounded p-2 text-center hover:bg-muted-foreground hover:font-bold hover:text-[#000]"
           >
-            <li>{label}</li>
+            <li className="transition-transform duration-200 hover:scale-110">
+              {label}
+            </li>
           </Link>
         ))}
       </ul>
-      <ul className="flex gap-4 justify-center">
-        <li className="cursor-pointer">
-          <Image src="/instagram.png" alt="Instagram" width={24} height={24} className="h-10 w-10" />
+      <ul className="flex justify-center gap-4">
+        <li className="cursor-pointer transition-transform duration-200 hover:scale-110">
+          <FaInstagram
+            className="h-10 w-10"
+            color="#fff"
+            style={{
+              backgroundColor: "#FF5191",
+              padding: "5px",
+              borderRadius: "50%",
+            }}
+          />
         </li>
-        <li className="cursor-pointer">
-          <Image src="/whatsapp.png" alt="Whatsapp" width={24} height={24} className="h-10 w-10" />
+        <li className="cursor-pointer transition-transform duration-200 hover:scale-110">
+          <FaWhatsapp
+            className="h-10 w-10"
+            color="#fff"
+            style={{
+              backgroundColor: "#25D366",
+              padding: "5px",
+              borderRadius: "50%",
+            }}
+          />
         </li>
-        <li className="cursor-pointer">
-          <Image src="/youtube.png" alt="Intagram" width={24} height={24} className="h-10 w-10"/>
+        <li className="cursor-pointer transition-transform duration-200 hover:scale-110">
+          <FaYoutube
+            className="h-10 w-10"
+            color="#fff"
+            style={{
+              backgroundColor: "#FF0000",
+              padding: "5px",
+              borderRadius: "50%",
+            }}
+          />
         </li>
       </ul>
     </aside>
